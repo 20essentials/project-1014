@@ -3,7 +3,7 @@
 </section>
 
 <script>
-  import { $ } from '@/utils/functions';
+  import { $, baseUrl } from '@/utils/functions';
   import gsap from 'gsap';
   import ScrollTrigger from 'gsap/ScrollTrigger';
   gsap.registerPlugin(ScrollTrigger);
@@ -19,7 +19,9 @@
 
   const ARRAY_OF_IMAGES = Array.from({ length: TOTAL_FRAMES }, (_, i) => {
     const img = document.createElement('img');
-    img.src = `/assets/frames/ezgif-frame-${(i + 1).toString().padStart(3, '0')}.png`;
+    img.src = baseUrl(
+      `/assets/frames/ezgif-frame-${(i + 1).toString().padStart(3, '0')}.png`
+    );
     return img;
   });
 
@@ -34,7 +36,7 @@
       scrub: 0.5
     }
   });
-  
+
   gsap.to($canvas, {
     scale: 1.5,
     scrollTrigger: {
