@@ -1,0 +1,66 @@
+<section>
+  <canvas class='am-canvas'></canvas>
+</section>
+
+<script>
+  import { $ } from '@/utils/functions';
+  import gsap from 'gsap';
+  import ScrollTrigger from 'gsap/ScrollTrigger';
+  gsap.registerPlugin(ScrollTrigger);
+
+  const $canvas = $('.am-canvas') as HTMLCanvasElement;
+  const $ctx = $canvas.getContext('2d') as CanvasRenderingContext2D;
+  const TOTAL_FRAMES = 50;
+  const WIDTH_IMAGE = 480;
+  const HEIGHT_IMAGE = 476;
+
+  $canvas.width = WIDTH_IMAGE;
+  $canvas.height = HEIGHT_IMAGE;
+
+  const ARRAY_OF_IMAGES = Array.from({ length: TOTAL_FRAMES }, (_, i) => {
+    const img = document.createElement('img');
+    img.src = `/assets/frames/ezgif-frame-${(i + 1).toString().padStart(3, '0')}.png`;
+    return img;
+  });
+
+  const donnut = { frame: 0 };
+
+  gsap.to(donnut, {
+    frame: TOTAL_FRAMES - 1,
+    snap: 'frame',
+    ease: 'none',
+    onUpdate: renderFrame,
+    scrollTrigger: {
+      scrub: 0.5
+    }
+  });
+  
+  gsap.to($canvas, {
+    scale: 1.5,
+    scrollTrigger: {
+      scrub: 0.5
+    }
+  });
+
+  ARRAY_OF_IMAGES[0].onload = () => renderFrame();
+
+  function renderFrame() {
+    $ctx.clearRect(0, 0, WIDTH_IMAGE, HEIGHT_IMAGE);
+    $ctx.drawImage(ARRAY_OF_IMAGES[donnut.frame], 0, 0);
+  }
+</script>
+
+<style>
+  section {
+    height: 100vh;
+  }
+
+  .am-canvas {
+    background-color: #fff;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    aspect-ratio: 480 / 476;
+  }
+</style>
